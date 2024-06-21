@@ -1,12 +1,14 @@
 #include <cstring>
 #include <iostream>
+#include <vector>
+
 class Score {};
 
 class Subject {};
 
 class Student {
   public:
-    std::string name;
+    std::vector<Score> scores;
 };
 
 class StudentClass {};

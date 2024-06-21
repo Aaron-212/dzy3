@@ -1,4 +1,6 @@
+#include <fstream>
 #include <iostream>
+#include <vector>
 
 // pre-declare
 class Student;
@@ -20,7 +22,9 @@ class Score {
     }
 };
 
-class Subject {};
+class Subject {
+    std::vector<Score> scores;
+};
 
 class Student {
   public:
@@ -29,8 +33,9 @@ class Student {
 
 class StudentClass {};
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    std::cout << "Hello, World again!" << std::endl;
-    return 0;
-}
+class Project {};
+class Gstudent : public Student {
+  public:
+    class Project;
+};
+int main() { return 0; }

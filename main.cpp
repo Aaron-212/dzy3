@@ -2,14 +2,14 @@
 
 class Score {};
 
-class Subject{};
+class Subject {};
 
 class Student {
-    public:
+  public:
     std::string name;
 };
 
-class StudentClass{};
+class StudentClass {};
 
 int main() {
     std::cout << "Hello, World!" << std::endl;

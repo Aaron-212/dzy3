@@ -26,7 +26,9 @@ class Subject {
   public:
     std::string name;
     std::vector<Score> scores;
-    Subject() { name = "empty"; }
+
+    // Constructors
+    Subject() { }
     Subject(std::string name) { this->name = name; }
     Subject(std::string name, std::vector<Score> scores) {
         this->name = name;
@@ -37,13 +39,28 @@ class Subject {
 class Student {
   public:
     std::string name;
+    int id;
+    int age;
+
+    // Constructors
+    Student() {
+        this->id = 0;
+        this->age = 0;
+    }
+    Student(std::string name, int id, int age) {
+        this->name = name;
+        this->id = id;
+        this->age = age;
+    }
 };
 
 class StudentClass {};
 
 class Project {};
+
 class Gstudent : public Student {
   public:
     class Project;
 };
+
 int main() { return 0; }

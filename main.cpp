@@ -39,7 +39,16 @@ class Student {
     std::string name;
 };
 
-class StudentClass {};
+class StudentClass {
+  public:
+    int class_num;
+    std::vector<Student> Students;
+    StudentClass(int class_num) { this->class_num = class_num; }
+    StudentClass(int class_num, std::vector<Student> Students) {
+        this->class_num = class_num;
+        this->Students = Students;
+    };
+};
 
 class Project {};
 class Gstudent : public Student {

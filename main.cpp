@@ -1,8 +1,14 @@
 #include <iostream>
 
 class Score {};
+
 class Subject{};
-class Student {};
+
+class Student {
+    public:
+    std::string name;
+};
+
 class StudentClass{};
 
 int main() {

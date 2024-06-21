@@ -1,5 +1,5 @@
+#include <cstring>
 #include <iostream>
-
 class Score {};
 
 class Subject {};

@@ -5,7 +5,12 @@ project (DZY3)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-find_package(GTest REQUIRED)
+if (OS_NAME STREQUAL "Windows")
+	find_package(GTest REQUIRED CONFIG)
+	set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
+else()
+	find_package(GTest REQUIRED)
+endif()
 
 add_executable(DZY3 source/main.cpp)
 

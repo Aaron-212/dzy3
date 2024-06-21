@@ -1,17 +1,11 @@
-name: CMake on multiple platforms
+name: CMake Build on multiple platforms
 
 on:
   push:
-    branches: ["main"]
-    paths: ["**.cpp", "**.h", "**.cmake", "CMakeLists.txt"]
-  pull_request:
-    branches: ["main"]
-    paths: ["**.cpp", "**.h", "**.cmake", "CMakeLists.txt"]
-
+    tags:
+      - v*
 jobs:
   build:
-    name: Build on ${{ matrix.os }} with ${{ matrix.c_compiler }}
-
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -62,3 +56,17 @@ jobs:
       - name: Test
         working-directory: ${{ steps.strings.outputs.build-output-dir }}
         run: ctest --build-config ${{ matrix.build_type }}
+
+      - name: Compress Build Artifacts
+        if: success()
+        run: |
+          output_name=build-${{ matrix.os }}-${{ matrix.build_type }}.tar.gz
+          tar -czf $output_name -C ${{ steps.strings.outputs.build-output-dir }} .
+          echo "artifact_name=$output_name" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.artifact_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

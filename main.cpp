@@ -4,12 +4,12 @@
 
 class Score {};
 
-class Subject {};
-
-class Student {
+class Subject {
   public:
     std::vector<Score> scores;
 };
+
+class Student {};
 
 class StudentClass {};
 

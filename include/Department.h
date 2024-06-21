@@ -4,6 +4,7 @@
 #include "Course.h"
 #include "Score.h"
 #include "Student.h"
+#include <algorithm>
 #include <string>
 #include <vector>
 

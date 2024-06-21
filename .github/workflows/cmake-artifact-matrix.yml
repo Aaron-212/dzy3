@@ -13,25 +13,17 @@ jobs:
 
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        build_type: [Release]
-        c_compiler: [clang, cl]
+        build_type: [Debug]
         include:
           - os: windows-latest
-            c_compiler: cl
             cpp_compiler: cl
+            install_packages_script: scripts/setup_packages.ps1
           - os: ubuntu-latest
-            c_compiler: clang
             cpp_compiler: clang++
+            install_packages_script: scripts/setup_packages.sh
           - os: macos-latest
-            c_compiler: clang
             cpp_compiler: clang++
-        exclude:
-          - os: windows-latest
-            c_compiler: clang
-          - os: ubuntu-latest
-            c_compiler: cl
-          - os: macos-latest
-            c_compiler: cl
+            install_packages_script: scripts/setup_packages.sh
 
     steps:
       - uses: actions/checkout@v4
@@ -41,6 +33,16 @@ jobs:
         shell: bash
         run: |
           echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+      - name: Install packages on Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: ./${{ matrix.install_packages_script }}
+
+      - name: Install packages on Linux and MacOS
+        if: ${ {matrix.os != 'windows-latest' }}
+        run: |
+          chmod +x ./${{ matrix.install_packages_script }}
+          ./${{ matrix.install_packages_script }}
 
       - name: Configure CMake
         run: >

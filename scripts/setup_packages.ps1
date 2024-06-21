@@ -9,7 +9,7 @@ if (-Not (Test-Path "C:\vcpkg")) {
 }
 
 # Install required packages
-& C:\vcpkg\vcpkg install packagename1:x64-windows packagename2:x64-windows
+& C:\vcpkg\vcpkg install gtest:x64-windows
 
 # Setting up the environment variable for vcpkg
 $env:VCPKG_ROOT="C:\vcpkg"

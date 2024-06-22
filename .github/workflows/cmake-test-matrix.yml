@@ -51,3 +51,12 @@ jobs:
         with:
           name: build-artifacts-${{ matrix.os }}-${{ matrix.c_compiler }}
           path: ${{ steps.strings.outputs.build-output-dir }}
+
+  conclusion:
+    name: conclusion
+    needs: build
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Result
+        run: ${{ (needs.build.result == 'success') || (needs.build.result == 'skipped') }}

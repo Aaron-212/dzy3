@@ -15,15 +15,15 @@
 
 ```mermaid
 classDiagram
-Score --|> Student
-Student --|> Score
-Course --|> Score
+  Score --|> Student
+  Student --|> Score
+  Course --|> Score
 
-Student --|> Department
-Couse --|> Department
+  Student --|> Department
+  Course --|> Department
 
-Graduate_Student --|> Student
-Graduate_Student --|> Project
+  Graduate_Student --|> Student
+  Graduate_Student --|> Project
 
 ```
 

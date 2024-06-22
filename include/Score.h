@@ -51,6 +51,7 @@ class Mark {
     }
 
     // Operator overload
+    bool operator==(const Mark &other) const { return type == other.type && value == other.value; }
     friend std::ostream &operator<<(std::ostream &os, const Mark &mark) {
         switch (mark.type) {
         case MarkType::Percentage:

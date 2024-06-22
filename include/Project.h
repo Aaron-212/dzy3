@@ -21,9 +21,8 @@ class Project {
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Project &project) {
-        std::cout << "Project ID:" << project.id << std::endl;
-        std::cout << "Name:" << project.name << std::endl;
-        std::cout << "Member Count:" << project.members.size() << std::endl;
+        os << "Project ID:" << project.id << ", Name:" << project.name << ", Member Count:" << project.members.size();
+        return os;
     }
 };
 

@@ -10,4 +10,4 @@ repos:
     rev: v18.1.7
     hooks:
       - id: clang-format
-        files: \.(cpp|hpp|c|h)$ # Adjust the regex to match the file extensions you want to format
+        files: \.(cpp|hpp|c|h)$

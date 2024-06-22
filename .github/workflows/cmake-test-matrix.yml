@@ -3,34 +3,15 @@ name: CMake Test on multiple platforms
 on:
   pull_request:
     branches: ["main"]
+    paths: ["**.cpp", "**.h", "**.cmake", "CMakeLists.txt"]
 
 jobs:
-  check-if-files-changed:
-    runs-on: ubuntu-latest
-    outputs:
-      files_changed: ${{ steps.check.outputs.files_changed }}
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Check if files have changed
-        id: check
-        run: |
-          git fetch origin main
-          changed_files=$(git diff --name-only origin/main..HEAD)
-          echo "Files changed: $changed_files"
-          if echo "$changed_files" | grep -E '\.(cpp|h|cmake)$|CMakeLists.txt'; then
-            echo "files_changed=true" >> $GITHUB_ENV
-          else
-            echo "files_changed=false" >> $GITHUB_ENV
-        shell: bash
-
   build:
-    needs: check-if-files-changed
     runs-on: ${{ matrix.os }}
-    if: ${{ env.files_changed == 'true' }}
+
     strategy:
       fail-fast: false
+
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         build_type: [Debug]
@@ -70,26 +51,3 @@ jobs:
         with:
           name: build-artifacts-${{ matrix.os }}-${{ matrix.c_compiler }}
           path: ${{ steps.strings.outputs.build-output-dir }}
-
-  conclusion:
-    name: conclusion
-    needs: [check-if-files-changed, build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Result
-        if: env.files_changed == 'false'
-        run: |
-          echo "No relevant files changed."
-          exit 0
-
-      - name: Result
-        if: needs.build.result == 'success'
-        run: |
-          echo "Build and tests completed successfully."
-          exit 0
-
-      - name: Result
-        if: needs.build.result != 'success'
-        run: |
-          echo "Build or tests failed."
-          exit 1

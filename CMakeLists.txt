@@ -5,12 +5,19 @@ project (DZY3)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
-	set(CMAKE_TOOLCHAIN_FILE "C:/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
-	find_package(GTest REQUIRED CONFIG)
-else()
-	find_package(GTest REQUIRED)
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+    message(FATAL_ERROR "CMake generation should be in a build directory!")
 endif()
+
+include(FetchContent)
+FetchContent_Declare(
+  	googletest
+  	# Specify the commit you depend on and update it regularly.
+  	URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
 
 add_executable(DZY3 source/main.cpp)
 

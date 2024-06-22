@@ -17,13 +17,10 @@ jobs:
         include:
           - os: windows-latest
             cpp_compiler: cl
-            install_packages_script: scripts/setup_packages.ps1
           - os: ubuntu-latest
             cpp_compiler: clang++
-            install_packages_script: scripts/setup_packages.sh
           - os: macos-latest
             cpp_compiler: clang++
-            install_packages_script: scripts/setup_packages.sh
 
     steps:
       - uses: actions/checkout@v4
@@ -33,16 +30,6 @@ jobs:
         shell: bash
         run: |
           echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-
-      - name: Install packages on Windows
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: ./${{ matrix.install_packages_script }}
-
-      - name: Install packages on Linux and MacOS
-        if: ${ {matrix.os != 'windows-latest' }}
-        run: |
-          chmod +x ./${{ matrix.install_packages_script }}
-          ./${{ matrix.install_packages_script }}
 
       - name: Configure CMake
         run: >

@@ -4,7 +4,7 @@
 #include "Course.h"
 #include "Student.h"
 #include <iostream>
-#include <ostream>
+#include <string>
 #include <variant>
 
 enum MarkType {

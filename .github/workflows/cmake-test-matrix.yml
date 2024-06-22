@@ -54,7 +54,7 @@ jobs:
 
   conclusion:
     name: conclusion
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
     if: always()
     steps:

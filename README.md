@@ -1,16 +1,49 @@
-# 大作业 3：**学生成绩管理系统**
+# 大作业 3：学生成绩管理系统
 
-## 一、基本要求
+## 架构
+
+### 头文件/类
+
+- `Course`类：存储课程信息。
+- `Student`类：存储学生信息。
+- `Score`类：存储学生成绩信息。
+- `Department`类：存储学院信息。
+- `Graduate_Student`类：存储研究生信息。
+- `Project`类：存储课题信息。
+
+关系：
+
+```mermaid
+classDiagram
+Score --|> Student
+Student --|> Score
+Course --|> Score
+
+Student --|> Department
+Couse --|> Department
+
+Graduate_Student --|> Student
+Graduate_Student --|> Project
+
+```
+
+## 原作业要求
+
+这边放一个原作业，用作参考。
+
+### 基本要求
 
 1. 能进行数据的添加、删除、修改、查询、排序；
 2. 完全使用类实现。
 3. 重载输入`>>`操作符，使得可以通过`cin`直接读入类的对象值。
 4. 编写`main`函数，测试系统的各种功能。
 
-## 二、系统基本类
+### 系统基本类
+
 系统基本类4个：`Score`类，`Subject`类，`Student`类，`Class`类。存储学生的个人信息，考试科目，成绩，班级信息。
 
-## 三、功能拓展
+### 功能拓展
+
 - 文件操作：
   1. 初始数据从文件导入，能够实现文件的显示；
   2. 数据保存至文件中；

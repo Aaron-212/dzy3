@@ -15,15 +15,16 @@
 
 ```mermaid
 classDiagram
-  Score -- 存储 --> Student
-  Student -- 引用 -｜> Score
-  Course -- 引用 -｜> Score
+  Score --* Student
+  Student --> Score
+  Course --> Score
 
-  Student -- 存储 --> Department
-  Course -- 存储 --> Department
+  Student --* Department
+  Course --* Department
 
-  Graduate_Student -. 继承 .-> Student
-  Project -- 存储 --> Graduate_Student
+  Graduate_Student --|> Student
+  Project --> Graduate_Student
+  Graduate_Student --> Project
 
 ```
 

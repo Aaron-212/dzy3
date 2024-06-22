@@ -6,7 +6,17 @@ on:
     paths: ["**.cpp", "**.h", "**.cmake", "CMakeLists.txt"]
 
 jobs:
+  style-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: clang-format Check
+        uses: jidicula/clang-format-action@v4.13.0
+        with:
+          clang-format-version: "18"
+
   build:
+    needs: style-check
     runs-on: ${{ matrix.os }}
 
     strategy:

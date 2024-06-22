@@ -7,3 +7,4 @@ endfunction()
 
 add_gtest(test_course)
 add_gtest(test_student)
+add_gtest(test_score)

@@ -6,7 +6,13 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-    message(FATAL_ERROR "CMake generation should be in a build directory!")
+    message(FATAL_ERROR
+    	"CMake generation should be in a build directory!"
+        "Run the following commands:"
+        "rm -rf CMakeCache.txt CMakeFiles"
+        "mkdir build && cd build"
+        "cmake .."
+    )
 endif()
 
 include(FetchContent)

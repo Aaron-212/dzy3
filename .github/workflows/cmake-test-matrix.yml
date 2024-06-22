@@ -28,7 +28,7 @@ jobs:
   build:
     needs: check-if-files-changed
     runs-on: ${{ matrix.os }}
-    if: env.files_changed == 'true'
+    if: ${{ env.files_changed == 'true' }}
     strategy:
       fail-fast: false
       matrix:

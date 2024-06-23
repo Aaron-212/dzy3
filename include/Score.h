@@ -2,155 +2,93 @@
 #define SCORE_H
 
 #include <iostream>
+#include <sqlite3.h>
 #include <stdexcept>
-
-enum class ScoreType {
-    Percentage, // 0-100
-    Letter,     // A, B, C, D, F
-    PassFail    // pass, fail
-};
-
-enum class LetterGrade { A, B, C, D, F };
-
-enum class PassFail { Fail, Pass };
+#include <string>
 
 class Score {
   public:
-    int courseID;   // The course in which the score was obtained
-    int studentId;  // The student who obtained the score
-    ScoreType type; // The type of score
-    union ScoreValue {
-        int percentage; // Used for Percentage and translated Letter and PassFail scores
-        LetterGrade letter;
-        PassFail passFail;
-
-        ScoreValue() : percentage(0) {}
-    } value;
+    int courseID;  // The course in which the score was obtained
+    int studentId; // The student who obtained the score
+    int score;     // The score obtained by the student
 
     // Constructors
-    Score() : courseID(0), studentId(0), type(ScoreType::Percentage) { value.percentage = 0; }
+    Score() : courseID(0), studentId(0), score(0) {}
 
-    Score(int courseID, int studentId, int percentage)
-        : courseID(courseID), studentId(studentId), type(ScoreType::Percentage) {
-        if (percentage < 0 || percentage > 100) {
-            throw std::invalid_argument("Percentage score must be between 0 and 100");
-        }
-        value.percentage = percentage;
-    }
-
-    Score(int courseID, int studentId, LetterGrade letter)
-        : courseID(courseID), studentId(studentId), type(ScoreType::Letter) {
-        value.letter = letter;
-    }
-
-    Score(int courseID, int studentId, PassFail passFail)
-        : courseID(courseID), studentId(studentId), type(ScoreType::PassFail) {
-        value.passFail = passFail;
-    }
+    Score(int courseID, int studentId, int percentage) : courseID(courseID), studentId(studentId), score(percentage) {}
+    Score(int courseID, int studentId, char letter)
+        : courseID(courseID), studentId(studentId), score(letterToPercentage(letter)) {}
+    Score(int courseID, int studentId, const std::string &pf)
+        : courseID(courseID), studentId(studentId), score(passFailToPercentage(pf)) {}
 
     // Operator overload
-    bool operator==(const Score &other) const {
-        if (type != other.type)
-            return false;
-        switch (type) {
-        case ScoreType::Percentage:
-            return value.percentage == other.value.percentage;
-        case ScoreType::Letter:
-            return value.letter == other.value.letter;
-        case ScoreType::PassFail:
-            return value.passFail == other.value.passFail;
-        default:
-            return false;
-        }
-    }
+    bool operator==(const Score &other) const { return score == other.score; }
 
     friend std::ostream &operator<<(std::ostream &os, const Score &score) {
-        os << "Course ID: " << score.courseID << ", Student ID: " << score.studentId;
-        switch (score.type) {
-        case ScoreType::Percentage:
-            os << ", Score Value: " << score.value.percentage << "%";
-            break;
-        case ScoreType::Letter:
-            os << ", Score Value: Grade " << score.letterToString(score.value.letter);
-            break;
-        case ScoreType::PassFail:
-            os << ", Score Value: " << score.passFailToString(score.value.passFail);
-            break;
-        }
+        os << "Course ID: " << score.courseID << ", Student ID: " << score.studentId << ", Score: " << score.score;
         return os;
     }
 
     // Function to convert letter grades to percentage for storage
-    static int letterToPercentage(LetterGrade letter) {
+    static int letterToPercentage(char letter) {
         switch (letter) {
-        case LetterGrade::A:
+        case 'A':
             return 100;
-        case LetterGrade::B:
+        case 'B':
             return 82;
-        case LetterGrade::C:
+        case 'C':
             return 72;
-        case LetterGrade::D:
+        case 'D':
             return 60;
-        case LetterGrade::F:
+        case 'F':
             return 0;
         default:
             throw std::invalid_argument("Invalid letter grade");
         }
     }
 
-    // Function to convert LetterGrade to string for display
-    static const char *letterToString(LetterGrade letter) {
-        switch (letter) {
-        case LetterGrade::A:
-            return "A";
-        case LetterGrade::B:
-            return "B";
-        case LetterGrade::C:
-            return "C";
-        case LetterGrade::D:
-            return "D";
-        case LetterGrade::F:
-            return "F";
-        default:
-            throw std::invalid_argument("Invalid letter grade");
-        }
-    }
-
-    // Function to convert PassFail to percentage for storage
-    static int passFailToPercentage(PassFail passFail) {
-        switch (passFail) {
-        case PassFail::Pass:
+    static int passFailToPercentage(const std::string &pf) {
+        if (pf == "Pass") {
             return 82;
-        case PassFail::Fail:
+        } else if (pf == "Fail") {
             return 0;
-        default:
-            throw std::invalid_argument("Invalid pass/fail value");
+        } else {
+            throw std::invalid_argument("Invalid pass/fail grade");
         }
     }
 
-    // Function to convert PassFail to string for display
-    static const char *passFailToString(PassFail passFail) {
-        switch (passFail) {
-        case PassFail::Pass:
-            return "Pass";
-        case PassFail::Fail:
-            return "Fail";
-        default:
-            throw std::invalid_argument("Invalid pass/fail value");
-        }
+    // Method to convert the score object to a database string
+    std::string to_db_string() const {
+        std::string result = std::to_string(courseID) + ", " + std::to_string(studentId) + ", " + std::to_string(score);
+        return result;
     }
 
-    int percentage() const {
-        switch (type) {
-        case ScoreType::Percentage:
-            return value.percentage;
-        case ScoreType::Letter:
-            return letterToPercentage(value.letter);
-        case ScoreType::PassFail:
-            return passFailToPercentage(value.passFail);
-        default:
-            throw std::invalid_argument("Invalid score type");
+    // cin overload
+    friend std::istream &operator>>(std::istream &is, Score &score) {
+        std::string type;
+        std::cout << "Enter course ID: ";
+        is >> score.courseID;
+        std::cout << "Enter student ID: ";
+        is >> score.studentId;
+        std::cout << "Enter score type: ";
+        is >> type;
+        if (type == "Percentage") {
+            std::cout << "Enter percentage: ";
+            is >> score.score;
+        } else if (type == "Letter") {
+            std::string grade;
+            std::cout << "Enter letter grade (A,B,C,D,F): ";
+            is >> grade;
+            score.score = letterToPercentage(grade[0]);
+        } else if (type == "PassFail") {
+            std::string pf;
+            std::cout << "Enter Pass/Fail: ";
+            is >> pf;
+            score.score = passFailToPercentage(pf);
+        } else {
+            throw std::invalid_argument("Invalid ScoreType");
         }
+        return is;
     }
 };
 

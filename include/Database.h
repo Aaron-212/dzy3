@@ -64,12 +64,10 @@ class Database {
     }
 
     void addScore(const Score &score) {
-        // Serialize ScoreType and ScoreValue to a string
-        std::string query = "INSERT INTO scores (student_id, course_id, score_type, score_value) VALUES (" +
-                            score.to_db_string() + "');";
+        std::string query =
+            "INSERT INTO scores (student_id, course_id, score_value) VALUES (" + score.to_db_string() + ");";
         executeQuery(query);
     }
-
     void removeStudent(int student_id) {
         std::string query = "DELETE FROM students WHERE id = " + std::to_string(student_id) + ";";
         executeQuery(query);

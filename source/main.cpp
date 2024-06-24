@@ -179,11 +179,19 @@ bool query_scores(Database &database) {
     return true;
 }
 
+bool update_score(Database &database) {
+    Score score;
+    std::cin >> score;
+    database.updateScore(score.studentID, score.courseID, score);
+    return true;
+}
+
 bool score_menu(Database &database) {
     std::cout << "\nScore Operations" << std::endl;
     std::cout << "1. Add score" << std::endl;
     std::cout << "2. Remove score" << std::endl;
     std::cout << "3. Query scores" << std::endl;
+    std::cout << "4. Update scores" << std::endl;
     std::cout << "0. Back to main menu" << std::endl;
 
     int choice;
@@ -200,6 +208,8 @@ bool score_menu(Database &database) {
     case 3:
         query_scores(database);
         break;
+    case 4:
+        update_score(database);
     case 0:
         return true;
     default:

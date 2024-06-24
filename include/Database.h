@@ -148,4 +148,11 @@ class Database {
         }
         return scores;
     }
+
+    void updateScore(int student_id, int course_id, const Score &score) {
+        std::string query = "UPDATE scores SET score_value = " + std::to_string(score.score) +
+                            " WHERE student_id = " + std::to_string(student_id) +
+                            " AND course_id = " + std::to_string(course_id) + ";";
+        executeQuery(query);
+    }
 };

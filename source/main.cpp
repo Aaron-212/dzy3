@@ -210,6 +210,7 @@ bool score_menu(Database &database) {
         break;
     case 4:
         update_score(database);
+        break;
     case 0:
         return true;
     default:
